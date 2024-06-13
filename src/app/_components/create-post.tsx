@@ -5,7 +5,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
@@ -46,10 +46,10 @@ export function CreatePost() {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="post title..." {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

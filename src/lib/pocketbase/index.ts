@@ -68,15 +68,9 @@ export class DatabaseClient {
     }
 
     this.client.authStore.loadFromCookie(cookie?.value || "");
-    const model = this.client.authStore.model;
-    if (!model) {
-      throw new Error("No user found");
-    }
-    const user = await this.client
-      .collection("users")
-      .getOne<UsersResponse<UsersRecord>>(model.id as string);
 
-    return user;
+    const model = this.client.authStore.model;
+    return model;
   }
 
   async refreshToken(cookieStore: ReadonlyRequestCookies) {

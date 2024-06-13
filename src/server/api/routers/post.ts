@@ -23,7 +23,6 @@ export const postRouter = createTRPCRouter({
 
   getLatest: publicProcedure.query(async () => {
     const post = await db.getLatestPosts();
-    console.log(post);
     return post[post.length - 1];
   }),
 });
