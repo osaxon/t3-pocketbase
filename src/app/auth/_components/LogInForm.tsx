@@ -8,14 +8,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { api } from "@/trpc/react";
 import { loginSchema } from "@/zod-schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-export const LogInForm = () => {
-  const { mutate: login } = api.auth.login.useMutation();
+export const LogInForm = ({
+  loginAction,
+}: {
+  loginAction: (data: FormData) => Promise<void>;
+}) => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,7 +28,7 @@ export const LogInForm = () => {
 
   const onSubmit = async (formData: z.infer<typeof loginSchema>) => {
     // TODO add client side validation and submission
-    login(formData);
+    //login(formData);
     // try {
     //   const response = await fetch("http://localhost:3000/api/auth/login", {
     //     method: "POST",
@@ -41,7 +43,7 @@ export const LogInForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form action={loginAction} className="space-y-8">
         <FormField
           control={form.control}
           name="email"
