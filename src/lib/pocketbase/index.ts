@@ -64,11 +64,19 @@ export class DatabaseClient {
   async getUser(cookieStore: ReadonlyRequestCookies) {
     const cookie = cookieStore.get("pb_auth");
     if (!cookie) {
-      return false;
+      throw new Error("No auth cookie found");
     }
 
     this.client.authStore.loadFromCookie(cookie?.value || "");
-    return this.client.authStore.model;
+    const model = this.client.authStore.model;
+    if (!model) {
+      throw new Error("No user found");
+    }
+    const user = await this.client
+      .collection("users")
+      .getOne<UsersResponse<UsersRecord>>(model.id as string);
+
+    return user;
   }
 
   async refreshToken(cookieStore: ReadonlyRequestCookies) {

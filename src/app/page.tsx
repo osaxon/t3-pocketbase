@@ -1,15 +1,16 @@
 import { CreatePost } from "@/app/_components/create-post";
+import db from "@/lib/pocketbase";
 import { api } from "@/trpc/server";
+import { cookies } from "next/headers";
 
 export default async function Home() {
+  const cookieStore = cookies();
+  const user = await db.getUser(cookieStore);
+
   return (
     <main className="">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <section>
-          This is a showcase of basic CRUD operations using tRPC, NextJS and
-          Pocketbase. The app is deployed on a VPS hosted with Hertzner Cloud
-          running Coolify.
-        </section>
+        <section>Welcome {user?.email}</section>
         <CrudShowcase />
       </div>
     </main>
@@ -22,7 +23,7 @@ async function CrudShowcase() {
   return (
     <div className="w-full max-w-xs">
       {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.title}</p>
+        <p className="truncate">The most recent post: {latestPost.title}</p>
       ) : (
         <p>You have no posts yet.</p>
       )}
