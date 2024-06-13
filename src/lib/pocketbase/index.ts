@@ -5,8 +5,9 @@ import type {
   UsersResponse,
 } from "./pocketbase-types";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import { env } from "@/env";
 
-export const POCKET_BASE_URL = "http://127.0.0.1:8090";
+export const POCKET_BASE_URL = env.NEXT_PUBLIC_POCKETBASE_API_URL;
 
 export class DatabaseClient {
   client: TypedPocketBase;
