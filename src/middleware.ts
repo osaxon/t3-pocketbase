@@ -10,7 +10,9 @@ export async function middleware(request: NextRequest) {
   const isLoggedIn = await db.isAuthenticated(cookies());
 
   if (request.nextUrl.pathname?.startsWith("/auth")) {
+    console.log(`[middleware] AUTH ROUTE`);
     if (isLoggedIn) {
+      console.log(`[middleware] REDIRECT TO /`);
       return NextResponse.redirect(new URL("/", request.url));
     }
     return;

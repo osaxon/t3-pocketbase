@@ -12,8 +12,11 @@ import { loginSchema } from "@/zod-schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
+import { useRouter } from "next/navigation";
 
 export const LogInForm = () => {
+    const router = useRouter();
+    
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -25,11 +28,14 @@ export const LogInForm = () => {
   const onSubmit = async (formData: z.infer<typeof loginSchema>) => {
     // TODO add client side validation and submission
     try {
-      await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+      if (res.ok) {
+        router.push("/");
+      }
     } catch (error) {
       console.error(error);
     }
