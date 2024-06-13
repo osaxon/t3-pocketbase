@@ -1,5 +1,6 @@
 import PocketBase, { type RecordAuthResponse } from "pocketbase";
 import type {
+  PostsRecord,
   TypedPocketBase,
   UsersRecord,
   UsersResponse,
@@ -76,6 +77,14 @@ export class DatabaseClient {
       return false;
     }
     await this.client.collection("users").authRefresh();
+  }
+
+  async createPost(title: string) {
+    return this.client.collection("posts").create({ title });
+  }
+
+  async getLatestPosts() {
+    return this.client.collection("posts").getFullList<PostsRecord>();
   }
 }
 

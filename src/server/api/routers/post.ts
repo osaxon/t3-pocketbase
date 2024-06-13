@@ -1,11 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-
-let post = {
-  id: 1,
-  name: "Hello World",
-};
+import db from "@/lib/pocketbase";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -17,16 +13,17 @@ export const postRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(z.object({ title: z.string().min(1) }))
     .mutation(async ({ input }) => {
       // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      post = { id: post.id + 1, name: input.name };
+      const post = await db.createPost(input.title);
       return post;
     }),
 
-  getLatest: publicProcedure.query(() => {
-    return post;
+  getLatest: publicProcedure.query(async () => {
+    const post = await db.getLatestPosts();
+    console.log(post);
+    return post[post.length - 1];
   }),
 });

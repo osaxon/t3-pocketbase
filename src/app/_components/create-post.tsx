@@ -1,43 +1,60 @@
 "use client";
-
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const createPostSchema = z.object({
+  title: z.string().min(1),
+});
 
 export function CreatePost() {
+  const form = useForm<z.infer<typeof createPostSchema>>({
+    resolver: zodResolver(createPostSchema),
+    defaultValues: {
+      title: "",
+    },
+  });
   const router = useRouter();
-  const [name, setName] = useState("");
 
   const createPost = api.post.create.useMutation({
     onSuccess: () => {
       router.refresh();
-      setName("");
+      form.reset();
     },
   });
 
+  const onSubmit = async (data: z.infer<typeof createPostSchema>) => {
+    createPost.mutate({ title: data.title });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createPost.mutate({ name });
-      }}
-      className="flex flex-col gap-2"
-    >
-      <input
-        type="text"
-        placeholder="Title"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isPending}
-      >
-        {createPost.isPending ? "Submitting..." : "Submit"}
-      </button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
   );
 }
