@@ -2,11 +2,14 @@ import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-
   return (
     <main className="">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <section>
+          This is a showcase of basic CRUD operations using tRPC, NextJS and
+          Pocketbase. The app is deployed on a VPS hosted with Hertzner Cloud
+          running Coolify.
+        </section>
         <CrudShowcase />
       </div>
     </main>
