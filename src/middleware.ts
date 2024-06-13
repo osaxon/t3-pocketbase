@@ -4,7 +4,9 @@ import { cookies } from "next/headers";
 import db from "@/lib/pocketbase";
 
 export async function middleware(request: NextRequest) {
-  console.log(`[middleware] ${request.method} ${request.url}`);
+  console.log(
+    `[middleware] ${new Date().valueOf()} ${request.method} ${request.url}`,
+  );
   const isLoggedIn = await db.isAuthenticated(cookies());
 
   if (request.nextUrl.pathname?.startsWith("/auth")) {
