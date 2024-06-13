@@ -13,11 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-export const LogInForm = ({
-  loginAction,
-}: {
-  loginAction: (data: FormData) => Promise<void>;
-}) => {
+export const LogInForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,22 +24,20 @@ export const LogInForm = ({
 
   const onSubmit = async (formData: z.infer<typeof loginSchema>) => {
     // TODO add client side validation and submission
-    //login(formData);
-    // try {
-    //   const response = await fetch("http://localhost:3000/api/auth/login", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(formData),
-    //   });
-    //   const data = (await response.json()) as RecordAuthResponse<UsersRecord>;
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    try {
+      await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <Form {...form}>
-      <form action={loginAction} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="email"
