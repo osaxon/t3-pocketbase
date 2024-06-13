@@ -1,4 +1,4 @@
-import PocketBase, { RecordAuthResponse } from "pocketbase";
+import PocketBase, { type RecordAuthResponse } from "pocketbase";
 import type {
   TypedPocketBase,
   UsersRecord,

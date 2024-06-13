@@ -1,8 +1,8 @@
 import db from "@/lib/pocketbase";
-import { cookies } from "next/headers";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const { email, password } = (await request.json()) as {
       email: string;
