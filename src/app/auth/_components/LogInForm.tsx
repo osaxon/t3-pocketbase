@@ -25,7 +25,7 @@ export const LogInForm = () => {
   const onSubmit = async (formData: z.infer<typeof loginSchema>) => {
     // TODO add client side validation and submission
     try {
-      await fetch("http://localhost:3000/api/auth/login", {
+      await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
