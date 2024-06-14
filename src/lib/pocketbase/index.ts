@@ -18,14 +18,11 @@ export class DatabaseClient {
     this.client = new PocketBase(POCKET_BASE_URL) as TypedPocketBase;
   }
 
-  async login(
-    email: string,
-    password: string,
-  ): Promise<RecordAuthResponse<UsersRecord>> {
+  async login(email: string, password: string) {
     try {
       const result = await this.client
         .collection("users")
-        .authWithPassword<UsersRecord>(email, password);
+        .authWithPassword<RecordAuthResponse<UsersRecord>>(email, password);
       if (!result?.token) {
         throw new Error("Invalid email or password");
       }
