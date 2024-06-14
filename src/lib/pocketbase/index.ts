@@ -1,6 +1,7 @@
 import PocketBase, { type RecordAuthResponse } from "pocketbase";
 import type {
   PostsRecord,
+  PostsResponse,
   TypedPocketBase,
   UsersRecord,
   UsersResponse,
@@ -81,15 +82,30 @@ export class DatabaseClient {
     await this.client.collection("users").authRefresh();
   }
 
-  async createPost(title: string) {
-    return this.client.collection("posts").create({ title });
+  async createPost(title: string, ownerId: string) {
+    console.log("creating post", title);
+    return this.client
+      .collection("posts")
+      .create<PostsResponse<PostsRecord>>({ title, owner: ownerId });
   }
 
-  async getLatestPosts() {
-    return this.client.collection("posts").getFullList<PostsRecord>();
+  async getUsersPosts(userId: string) {
+    return this.client
+      .collection("posts")
+      .getFullList<
+        PostsResponse<PostsRecord>
+      >({ filter: `owner = "${userId}"`, sort: "-created" });
+  }
+
+  async deletePost(postId: string) {
+    return this.client.collection("posts").delete(postId);
   }
 }
 
 export const db = new DatabaseClient();
+
+export const createServerClient = () => {
+  return new DatabaseClient();
+};
 
 export default db;

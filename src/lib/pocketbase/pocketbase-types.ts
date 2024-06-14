@@ -35,11 +35,11 @@ export type AuthSystemFields<T = never> = {
 // Record types for each collection
 
 export type PostsRecord = {
+	owner?: RecordIdString
 	title?: string
 }
 
 export type UsersRecord = {
-    token: string
 	avatar?: string
 	name?: string
 }

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { cache } from "react";
 import { createCaller } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
+import { createServerClient } from "@/lib/pocketbase";
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
@@ -15,6 +16,8 @@ const createContext = cache(() => {
 
   return createTRPCContext({
     headers: heads,
+    pb: createServerClient(),
+    initator: "server.ts",
   });
 });
 
