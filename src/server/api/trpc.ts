@@ -26,7 +26,6 @@ import { ZodError } from "zod";
 export const createTRPCContext = async (opts: {
   headers: Headers;
   pb: DatabaseClient;
-  initator: string;
 }) => ({
   ...opts,
   pb: db,

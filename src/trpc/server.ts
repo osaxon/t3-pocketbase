@@ -6,6 +6,7 @@ import { createCaller } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
 import { createServerClient } from "@/lib/pocketbase";
 
+const db = createServerClient();
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a tRPC call from a React Server Component.
@@ -16,8 +17,7 @@ const createContext = cache(() => {
 
   return createTRPCContext({
     headers: heads,
-    pb: createServerClient(),
-    initator: "server.ts",
+    pb: db,
   });
 });
 
